@@ -1,0 +1,68 @@
+---
+title: "Maps"
+author: "James Tripp"
+format: html
+editor: visual
+---
+
+## Maps
+
+Dr Federica Coluzzi is working on Dante's Female Public and a map is part of the project. Here we explore the dataset and plot that map.
+
+```{r}
+library(leaflet)
+library(tidyverse)
+```
+
+Get the data from the [github repository](https://github.com/fedecoluzzi/Italianlibrariesmap). Note: this project is a wonderful work in progress.
+
+```{r}
+url <- "https://raw.githubusercontent.com/fedecoluzzi/Italianlibrariesmap/main/data/GEODATA_CENTRE_SOUTH_ITALY.csv"
+download.file(url, "map.csv")
+```
+
+Read in the data.
+
+```{r}
+df <- read_csv("map.csv")
+```
+
+```{r}
+df
+```
+
+```{r}
+names(df)
+```
+
+```{r}
+hist(df$`Number of works`)
+```
+
+```{r}
+df %>%
+  select(c(`Name of Library`, `Number of works`)) %>%
+  arrange(desc(`Number of works`))
+```
+
+```{r}
+leaflet(df) %>%
+  addTiles %>%
+  addMarkers(lng = df$Longitude, lat = df$Latitude)
+```
+
+```{r}
+leaflet(df) %>%
+  addTiles %>%
+  addMarkers(lng = ~Longitude,
+             lat = ~Latitude,
+             popup = ~`Name of Library`)
+```
+
+```{r}
+leaflet(df) %>%
+  addProviderTiles(providers$CartoDB.Voyager) %>%
+  addMarkers(lng = ~Longitude,
+             lat = ~Latitude,
+             popup = ~`Name of Library`)
+```

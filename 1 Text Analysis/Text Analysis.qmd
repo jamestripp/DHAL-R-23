@@ -24,4 +24,118 @@ You can add options to executable code like this
 2 * 2
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+We can create variables in our environment.
+
+```{r}
+this_thing <- 44
+```
+
+And manipulate them.
+
+```{r}
+this_thing * 2
+```
+
+# Text Analysis
+
+Our example is from the Programming Historian article [here](https://programminghistorian.org/en/lessons/basic-text-processing-in-r "Programming historian article").
+
+"Two R packages need to be installed before moving on through the tutorial. These are **tidyverse**^[3](https://programminghistorian.org/en/lessons/basic-text-processing-in-r#fn:8)^ and **tokenizers**.^[4](https://programminghistorian.org/en/lessons/basic-text-processing-in-r#fn:9)^ The first provides convenient tools for reading in and working with data sets, and the second contains the functions that allow us to split text data into words and sentences. To install these, simply start R on your computer and run the following two lines in the console:
+
+```{r}
+library("tidyverse")
+library("tokenizers")
+```
+
+## Word Tokenisation
+
+In this section, we will work with a single paragraph of text. The example here is a paragraph from the opening of Barack Obama\'s final State of the Union address in 2016.
+
+To read this into R, copy and paste the following into the R console.
+
+```{r}
+text <- paste("Now, I understand that because it's an election season",
+          "expectations for what we will achieve this year are low.",
+          "But, Mister Speaker, I appreciate the constructive approach",
+          "that you and other leaders took at the end of last year",
+          "to pass a budget and make tax cuts permanent for working",
+          "families. So I hope we can work together this year on some",
+          "bipartisan priorities like criminal justice reform and",
+          "helping people who are battling prescription drug abuse",
+          "and heroin abuse. So, who knows, we might surprise the",
+          "cynics again")
+```
+
+```{r}
+words <- tokenize_words(text)
+words
+```
+
+## Sentence boundaries
+
+```{r}
+sentences <- tokenize_sentences(text)
+sentences
+```
+
+```{r}
+sentence_words <- tokenize_words(sentences[[1]])
+sapply(sentence_words, length)
+```
+
+## A guttenberg book
+
+As an aside, we can download books from gutenberg.
+
+```{r}
+library(gutenbergr)
+```
+
+The Ethics of Aristotle
+
+```{r}
+gutenberg_works() %>%
+  filter(author == "Aristotle")
+```
+
+```{r}
+book <- gutenberg_download(8438)
+head(book)
+```
+
+```{r}
+book$text[10:70]
+```
+
+```{r}
+paste(book$text[10:70], collapse = "")
+```
+
+```{r}
+text <- paste(book$text[10:70], collapse = "")
+sentences <- tokenize_sentences(text)
+sentences
+```
+
+```{r}
+sentence_words <- tokenize_words(sentences[[1]])
+sapply(sentence_words, length)
+```
+
+```{r}
+lengths <- sapply(sentence_words, length)
+plot(lengths)
+```
+
+## Whole book
+
+```{r}
+text <- paste(book$text, collapse = "")
+sentences <- tokenize_sentences(text)
+sentence_words <- tokenize_words(sentences[[1]])
+lengths <- sapply(sentence_words, length)
+plot(lengths,
+     main = "Length of sentences in The Ethics of Aristotle",
+     ylab = "Length",
+     xlab = "Index", pch=20, cex=0.2)
+```

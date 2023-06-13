@@ -1,0 +1,86 @@
+---
+title: "Networks"
+author: "James Tripp"
+format: html
+editor: visual
+---
+
+## Networks
+
+Represent links between nodes. Here we will look at a quaker network which was used in a [previous CDI workshop](https://github.com/WarwickCDI/workshop-networks-a-skillsworkshop). There is also a programming historian article on temporal networks which you might find interesting.
+
+Our library for networks is called networkx.
+
+```{r}
+library(igraph)
+library(tidyverse)
+library(RColorBrewer)
+```
+
+You can add options to executable code like this
+
+```{r}
+download.file("https://raw.githubusercontent.com/melaniewalsh/sample-social-network-datasets/master/sample-datasets/quakers/quakers-network.graphml", "quakers.graphml")
+graph <- read.graph("quakers.graphml", format="graphml")
+```
+
+```{r}
+summary(graph)
+```
+
+```{r}
+plot(graph)
+```
+
+```{r}
+plot(graph, layout=layout.random)
+```
+
+```{r}
+plot(graph, layout=layout.fruchterman.reingold(graph))
+```
+
+```{r}
+plot(graph,
+     layout=layout.circle(graph),
+     vertex.label = V(graph)$id,
+     vertex.size=0,
+     vertex.label.cex=.5,
+     vertex.label.degree=lab.locs)
+```
+
+```{r}
+hist(degree(graph))
+```
+
+```{r}
+df <- tibble(
+  quaker = V(graph)$id,
+  degree = degree(graph,
+       v = V(graph))
+)
+df %>%
+  arrange(desc(degree))
+```
+
+```{r}
+c2 = cluster_leading_eigen(graph)
+df$cluster <- c2$membership
+df %>%
+  filter(cluster == 2)
+```
+
+```{r}
+colors <- brewer.pal(n = 9, name = "Dark2")
+plot(graph,
+     vertex.color = colors[df$cluster],
+     layout=layout.fruchterman.reingold(graph),
+     vertex.label = df$cluster)
+  
+```
+
+```{r}
+df %>%
+  filter(cluster == 4) %>%
+  arrange(desc(degree))
+```
