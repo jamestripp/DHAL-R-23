@@ -1,0 +1,12 @@
+install.packages(
+ c( 
+  "tibble",
+  "dplr",
+  "leaflet",
+  "igraph",
+  "tidyverse",
+  "tokenizers",
+  "gutenbergr",
+  "RColorBrewer",
+  )
+)
