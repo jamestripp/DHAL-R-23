@@ -45,8 +45,7 @@ plot(graph,
      layout=layout.circle(graph),
      vertex.label = V(graph)$id,
      vertex.size=0,
-     vertex.label.cex=.5,
-     vertex.label.degree=lab.locs)
+     vertex.label.cex=.5)
 ```
 
 ```{r}

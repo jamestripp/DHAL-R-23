@@ -49,7 +49,7 @@ library("tokenizers")
 
 ## Word Tokenisation
 
-In this section, we will work with a single paragraph of text. The example here is a paragraph from the opening of Barack Obama\'s final State of the Union address in 2016.
+In this section, we will work with a single paragraph of text. The example here is a paragraph from the opening of Barack Obama's final State of the Union address in 2016.
 
 To read this into R, copy and paste the following into the R console.
 
